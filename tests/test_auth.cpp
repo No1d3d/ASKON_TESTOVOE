@@ -3,6 +3,19 @@
 #include <memory>
 #include <array>
 
+#ifdef _WIN32
+    #define popen _popen
+    #define pclose _pclose
+#endif
+
+#ifdef _WIN32
+    std::string exe_path = "auth_app.exe";
+#else
+    std::string exe_path = "./auth_app";
+#endif
+
+std::string cmd = exe_path + " some_args";
+
 std::string run(const std::string& cmd)
 {
     std::array<char, 128> buf;
@@ -31,26 +44,26 @@ COOLINVALIDKEYFORTESTScoolinvalidkeyfortests123123
 
 TEST(CLI, NoArgs)
 {
-    auto out = run("./auth_app");
+    auto out = run(exe_path);
     EXPECT_NE(out.find("FAILED"), std::string::npos);
 }
 
 TEST(CLI, ValidKey)
 {
-    std::string cmd = "./auth_app \"" + std::string(VALID_KEY) + "\"";
+    std::string cmd = exe_path + " \"" + std::string(VALID_KEY) + "\"";
     auto out = run(cmd);
     EXPECT_NE(out.find("SUCCESS"), std::string::npos);
 }
 
 TEST(CLI, InvalidKey)
 {
-    std::string cmd = "./auth_app \"" + std::string(INVALID_KEY) + "\"";
+    std::string cmd = exe_path + " \"" + std::string(INVALID_KEY) + "\"";
     auto out = run(cmd);
     EXPECT_NE(out.find("FAILED"), std::string::npos);
 }
 
 TEST(CLI, TooManyArgs)
 {
-    auto out = run("./auth_app a b");
+    auto out = run(exe_path + " a b");
     EXPECT_NE(out.find("FAILED"), std::string::npos);
 }
