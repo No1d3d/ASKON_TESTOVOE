@@ -1,0 +1,11 @@
+# Закомментировать ненужные сервисы, специфичные для операционных систем
+services:
+  linux:
+    build:
+      context: .
+      dockerfile: Dockerfile.linux
+
+#  windows:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile.windows

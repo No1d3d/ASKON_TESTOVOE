@@ -1,0 +1,20 @@
+FROM mcr.microsoft.com/windows/servercore:ltsc2022
+
+SHELL ["cmd", "/S", "/C"]
+
+RUN powershell -Command \
+    Invoke-WebRequest https://bootstrap.pypa.io/get-pip.py -OutFile get-pip.py; \
+    python get-pip.py
+
+RUN pip install conan
+
+WORKDIR C:\app
+COPY . .
+
+RUN conan profile detect --force
+
+RUN conan install . --output-folder=build --build=missing
+RUN cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=build/conan_toolchain.cmake
+RUN cmake --build build
+
+CMD cd build && ctest
