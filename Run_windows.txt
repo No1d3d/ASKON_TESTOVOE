@@ -1,0 +1,5 @@
+rmdir /s /q build
+conan install . -of build --build=missing
+cmake --preset conan-default
+cmake --build --preset conan-release
+ctest --preset conan-release --output-on-failure -V

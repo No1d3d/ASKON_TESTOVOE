@@ -1,53 +1,42 @@
 cmake_minimum_required(VERSION 3.20)
 project(auth_app LANGUAGES CXX)
 
-# Стандарт
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# От ошибок Conan
-if(NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE Release)
-endif()
-
-include(${CMAKE_BINARY_DIR}/conan_toolchain.cmake OPTIONAL)
-
-# Зависимости
+# Dependencies from Conan
 find_package(OpenSSL REQUIRED)
 find_package(GTest REQUIRED)
 
-# Библиотека с логикой
-add_library(auth_lib
-    src/auth.cpp
-)
+# Library
+add_library(auth_lib src/auth.cpp)
 
-target_include_directories(auth_lib PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/src
-)
+target_include_directories(auth_lib PUBLIC src)
 
-target_link_libraries(auth_lib
+target_link_libraries(auth_lib PUBLIC
     OpenSSL::SSL
     OpenSSL::Crypto
 )
 
-# Основное приложение
-add_executable(auth_app
-    src/main.cpp
+target_compile_features(auth_lib PUBLIC cxx_std_17)
+
+target_compile_options(auth_lib PRIVATE
+    $<$<CXX_COMPILER_ID:MSVC>:/W4>
+    $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -Wpedantic>
 )
 
-target_link_libraries(auth_app
-    auth_lib
-)
+# App
+add_executable(auth_app src/main.cpp)
+target_link_libraries(auth_app PRIVATE auth_lib)
 
-# Тесты
+# Tests
 enable_testing()
 
-add_executable(auth_tests
-    tests/test_auth.cpp
-)
+add_executable(auth_tests tests/test_auth.cpp)
 
-target_link_libraries(auth_tests
+target_link_libraries(auth_tests PRIVATE
     auth_lib
+    GTest::gtest
     GTest::gtest_main
 )
 
