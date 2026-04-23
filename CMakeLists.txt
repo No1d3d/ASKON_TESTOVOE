@@ -48,9 +48,7 @@ add_executable(auth_tests
 
 target_link_libraries(auth_tests
     auth_lib
-    GTest::gtest
     GTest::gtest_main
 )
 
-include(GoogleTest)
-gtest_discover_tests(auth_tests)
+add_test(NAME auth_tests COMMAND auth_tests)

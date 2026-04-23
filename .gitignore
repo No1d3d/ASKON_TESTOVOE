@@ -1,0 +1,9 @@
+build/
+build*/
+CMakeFiles/
+CMakeCache.txt
+*.exe
+*.o
+*.a
+conan_toolchain.cmake
+conan/
