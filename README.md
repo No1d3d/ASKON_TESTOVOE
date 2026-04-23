@@ -9,36 +9,24 @@ Test Task For Askon
 ### Требования
 - CMake 3.20+
 - Conan 2.x
-- Компилятор: GCC (MinGW на Windows) или Clang/GCC на Linux
+- Компилятор: Windows - MSVS / Linux - GCC
 
 ### Шаги сборки
-1. Установите зависимости через Conan:
+   # windows
    ```
+   conan install . -of build --build=missing
+   cmake --preset conan-default
+   cmake --build --preset conan-release
+   ctest --preset conan-release --output-on-failure -V
+   ```
+   
+   # linux
+   ```
+   conan profile detect --force
    conan install . --build=missing
-   ```
-   На Windows с MinGW:
-   ```
-   conan install . --profile mingw --build=missing
-   ```
-
-2. Сгенерируйте файлы сборки:
-   ```
-   cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=build/conan_toolchain.cmake
-   ```
-
-3. Соберите проект:
-   ```
+   cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=build/conan_toolchain.cmake -DCMAKE_BUILD_TYPE=Release
    cmake --build build
+   cd build && ctest --output-on-failure -V
    ```
-
-4. Запустите тесты:
-   ```
-   cd build && ctest --output-on-failure
-   ```
-
-### Запуск программы
-```
-./build/auth_app "-----BEGIN PUBLIC KEY-----\n...\n-----END PUBLIC KEY-----"
-```
 
 Вывод: "Authorization SUCCESS" или "Authorization FAILED"
