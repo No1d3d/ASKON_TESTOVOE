@@ -14,19 +14,20 @@ Test Task For Askon
 ### Шаги сборки
    # windows
    ```
-   conan install . -of build --build=missing
-   cmake --preset conan-default
-   cmake --build --preset conan-release
+   conan profile detect --force
+   cmake --preset conan-release
+   del /f CMakeUserPresets.json
+   cmake --build . --preset conan-release
    ctest --preset conan-release --output-on-failure -V
    ```
    
    # linux
    ```
    conan profile detect --force
-   conan install . --build=missing
-   cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=build/conan_toolchain.cmake -DCMAKE_BUILD_TYPE=Release
-   cmake --build build
-   cd build && ctest --output-on-failure -V
+   cmake --preset conan-release
+   rm -rf CMakeUserPresets.json
+   cmake --build . --preset conan-release
+   ctest --preset conan-release --output-on-failure -V
    ```
 
 Вывод: "Authorization SUCCESS" или "Authorization FAILED"
