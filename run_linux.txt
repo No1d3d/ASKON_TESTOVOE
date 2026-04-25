@@ -1,0 +1,5 @@
+conan profile detect --force
+cmake --preset conan-release
+rm -rf CMakeUserPresets.json
+cmake --build . --preset conan-release
+ctest --preset conan-release --output-on-failure

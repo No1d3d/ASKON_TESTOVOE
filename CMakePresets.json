@@ -1,0 +1,34 @@
+{
+  "version": 3,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 20
+  },
+  "configurePresets": [
+    {
+      "name": "conan-release",
+      "displayName": "Conan Release",
+      "generator": "Ninja",
+      "binaryDir": "build/release",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_PROJECT_TOP_LEVEL_INCLUDES": "${sourceDir}/cmake/conan_provider.cmake"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "conan-release",
+      "configurePreset": "conan-release"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "conan-release",
+      "configurePreset": "conan-release",
+      "output": {
+        "outputOnFailure": true
+      }
+    }
+  ]
+}

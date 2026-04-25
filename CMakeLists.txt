@@ -4,7 +4,7 @@ project(auth_app LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Dependencies from Conan
+# Dependencies (через Conan Provider)
 find_package(OpenSSL REQUIRED)
 find_package(GTest REQUIRED)
 
