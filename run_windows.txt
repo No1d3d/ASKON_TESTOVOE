@@ -1,9 +1,5 @@
-# Сборка с использованием Conan Provider (CMakePresets)
-# Conan вызовы скрыты "под капотом" через CMake presets
 conan profile detect --force
-conan install . --build=missing
-
-# CMake автоматически использует preset conan-release из CMakePresets.json
 cmake --preset conan-release
+del /f CMakeUserPresets.json
 cmake --build . --preset conan-release
-ctest --preset conan-release --output-on-failure
+ctest --preset conan-release --output-on-failure -V
